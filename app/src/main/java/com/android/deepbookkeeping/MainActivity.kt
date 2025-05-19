@@ -1,6 +1,7 @@
 package com.android.deepbookkeeping
 
 import android.os.Bundle
+import android.view.SurfaceControl.Transaction
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.android.deepbookkeeping.ui.bottomsheet.AddTransactionDialogFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -29,16 +31,18 @@ class MainActivity : AppCompatActivity() {
 
 //        val configuration = AppBarConfiguration.Builder(bottomNavigationView.menu).build()
 //        NavigationUI.setupActionBarWithNavController(this, controller, configuration)
-//        NavigationUI.setupWithNavController(bottomNavigationView, controller)
-        val configuration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home,
-                R.id.navigation_report,
-                R.id.navigation_settings
-            )
-        )
+        NavigationUI.setupWithNavController(bottomNavigationView, controller)
 
-        NavigationUI.setupActionBarWithNavController(this, controller, configuration)
-        bottomNavigationView.setupWithNavController(controller)
+
+//        val configuration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home,
+//                R.id.navigation_report,
+//                R.id.navigation_settings
+//            )
+//        )
+//
+//        NavigationUI.setupActionBarWithNavController(this, controller, configuration)
+//        bottomNavigationView.setupWithNavController(controller)
     }
 }

@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_report"
-        android:name="com.android.deepbookkeeping.ui.report.ReportFragment"
+        android:name="com.android.deepbookkeeping.ui.statistics.StatisticsFragment"
         android:label="fragment_report"
-        tools:layout="@layout/fragment_report" />
+        tools:layout="@layout/fragment_statistics" />
 
     <fragment
         android:id="@+id/navigation_settings"

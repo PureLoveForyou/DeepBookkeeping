@@ -1,4 +1,4 @@
-package com.android.deepbookkeeping.ui.report
+package com.android.deepbookkeeping.ui.statistics
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.android.deepbookkeeping.R
 
-class ReportFragment : Fragment() {
+class StatisticsFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ReportFragment()
+        fun newInstance() = StatisticsFragment()
     }
 
-    private val viewModel: ReportViewModel by viewModels()
+    private val viewModel: StatisticsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +26,6 @@ class ReportFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_report, container, false)
+        return inflater.inflate(R.layout.fragment_statistics, container, false)
     }
 }
