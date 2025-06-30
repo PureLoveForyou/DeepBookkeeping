@@ -16,6 +16,7 @@ fragmentKtx = "1.6.0"
 navigationFragmentKtx = "2.6.0"
 navigationUiKtx = "2.6.0"
 room_version = "2.7.1"
+ksp = "2.1.21-2.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,4 +40,4 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+ksp = {id = "com.google.devtools.ksp", version.ref = "ksp"}
