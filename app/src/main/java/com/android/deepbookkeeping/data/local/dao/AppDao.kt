@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
-import com.android.deepbookkeeping.data.local.entity.Account
 import com.android.deepbookkeeping.data.local.entity.Transaction
 import com.android.deepbookkeeping.data.local.entity.User
 
@@ -17,19 +15,6 @@ interface AppDao {
 
     @Query("SELECT * FROM users WHERE id = :userId")
     suspend fun getUser(userId: String): User?
-
-    // 账户操作
-    @Insert
-    suspend fun insertAccount(account: Account): Long
-
-    @Update
-    suspend fun updateAccount(account: Account)
-
-    @Query("SELECT * FROM accounts WHERE userId = :userId ORDER BY isDefault DESC, createdAt DESC")
-    fun getAccountByUser(userId: String): LiveData<List<Account>>
-
-    @Query("UPDATE accounts SET balance = balance + :amount WHERE id = :accountId")
-    suspend fun updateAccountBalance(accountId: Int, amount: Double)
 
     // 交易操作
     @Insert
@@ -43,15 +28,6 @@ interface AppDao {
     """
     )
     fun getTransactionByUser(userId: String): LiveData<List<Transaction>>
-
-    @Query(
-        """
-        SELECT * FROM transactions
-        WHERE accountId = :accountId
-        ORDER BY date DESC
-    """
-    )
-    fun getTransactionByAccount(accountId: Int): LiveData<List<Transaction>>
 
     @Query(
         """

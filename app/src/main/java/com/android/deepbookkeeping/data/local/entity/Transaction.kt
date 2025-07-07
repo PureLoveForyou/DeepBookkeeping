@@ -9,24 +9,17 @@ import androidx.room.PrimaryKey
     tableName = "transactions",
     foreignKeys = [
         ForeignKey(
-            entity = Account::class,
-            parentColumns = ["id"],
-            childColumns = ["accountId"],
-            onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
             entity = User::class,
             parentColumns = ["id"],
             childColumns = ["userId"],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["accountId"]), Index(value = ["userId"])]
+    indices = [Index(value = ["userId"])]
 )
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val accountId: Int, // 关联的账户ID
     val userId: String, // 关联的用户ID
     val amount: Double,
     val category: String,
