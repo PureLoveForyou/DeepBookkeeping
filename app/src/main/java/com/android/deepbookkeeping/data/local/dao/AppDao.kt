@@ -2,42 +2,40 @@ package com.android.deepbookkeeping.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.android.deepbookkeeping.data.local.entity.Transaction
-import com.android.deepbookkeeping.data.local.entity.User
 
 @Dao
 interface AppDao {
-    // 用户表操作
-    @Insert
-    suspend fun insertUser(user: User)
-
-    @Query("SELECT * FROM users WHERE id = :userId")
-    suspend fun getUser(userId: String): User?
-
     // 交易操作
     @Insert
-    suspend fun insertTransaction(transaction: Transaction): Long
+    suspend fun insert(transaction: Transaction): Long
+
+    @Update
+    suspend fun update(transaction: Transaction)
+
+    @Delete
+    suspend fun delete(transaction: Transaction)
 
     @Query(
         """
-        SELECT * FROM transactions 
-        WHERE userId = :userId 
+        SELECT * FROM transactions
         ORDER BY date DESC
     """
     )
-    fun getTransactionByUser(userId: String): LiveData<List<Transaction>>
+    fun getAllTransactions(): LiveData<List<Transaction>>
 
     @Query(
         """
         SELECT SUM(amount) FROM transactions
-        WHERE userId = :userId AND type = :type
+        WHERE type = :type
         AND date BETWEEN :startDate AND :endDate
     """
     )
-    fun getTotalAmountByType(
-        userId: String,
+    fun getTotalAmount(
         type: Int,
         startDate: Long,
         endDate: Long

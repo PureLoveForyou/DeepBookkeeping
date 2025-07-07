@@ -7,10 +7,9 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.android.deepbookkeeping.data.local.dao.AppDao
 import com.android.deepbookkeeping.data.local.entity.Transaction
-import com.android.deepbookkeeping.data.local.entity.User
 
 @Database(
-    entities = [User::class, Transaction::class],
+    entities = [Transaction::class],
     version = 1,
     exportSchema = true
 )

@@ -5,22 +5,10 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = "transactions",
-    foreignKeys = [
-        ForeignKey(
-            entity = User::class,
-            parentColumns = ["id"],
-            childColumns = ["userId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ],
-    indices = [Index(value = ["userId"])]
-)
+@Entity(tableName = "transactions")
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val userId: String, // 关联的用户ID
     val amount: Double,
     val category: String,
     val description: String? = null,
