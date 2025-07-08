@@ -3,5 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="toolbar">#000000</color>
-    <color name="navigation_background">#FF000000</color>
+    <color name="navigation_background">#CC31283E</color>
 </resources>

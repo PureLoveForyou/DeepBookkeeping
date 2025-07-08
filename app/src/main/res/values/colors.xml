@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="my_primary">#4E5EB6</color>
+    <color name="my_primary">#308ED9</color>
     <color name="addExpense">#673AB7</color>
     <color name="toolbar">#FFFFFF</color>
     <color name="chip_icon_tint">#4CAF50</color>
