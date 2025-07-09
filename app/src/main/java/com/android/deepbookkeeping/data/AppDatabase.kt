@@ -13,18 +13,18 @@ import com.android.deepbookkeeping.data.local.entity.Transaction
     version = 1,
     exportSchema = true
 )
-abstract class AppDataBase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao(): AppDao
 
     companion object {
         @Volatile
-        private var INSTANCE: AppDataBase? = null
+        private var INSTANCE: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDataBase {
+        fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDataBase::class.java,
+                    AppDatabase::class.java,
                     "accounting_database"
                 ).addCallback(object : RoomDatabase.Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {

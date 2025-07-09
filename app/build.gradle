@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -56,7 +56,6 @@ dependencies {
     // Hilt 依赖注入
     implementation libs.google.dagger.hilt
     ksp libs.google.hilt.compiler
-    implementation libs.hilt.navigation.compose
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
