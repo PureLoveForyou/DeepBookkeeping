@@ -35,7 +35,7 @@ class AddTransactionDialogFragment : BottomSheetDialogFragment() {
         fun onTransactionAdded(
             amount: Double,
             description: String,
-            type: String,
+            type: Int,
             category: String
         )
     }
@@ -110,9 +110,9 @@ class AddTransactionDialogFragment : BottomSheetDialogFragment() {
         }
 
         val type = when (radioGroupType.checkedRadioButtonId) {
-            R.id.radioIncome -> "收入"
-            R.id.radioExpense -> "支出"
-            else -> "支出"
+            R.id.radioIncome -> 0
+            R.id.radioExpense -> 1
+            else -> 1
         }
 
         val selectedChipId = chipGroupCategory.checkedChipId
