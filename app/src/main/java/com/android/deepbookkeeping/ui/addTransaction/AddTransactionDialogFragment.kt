@@ -1,4 +1,4 @@
-package com.android.deepbookkeeping.ui.bottomsheet
+package com.android.deepbookkeeping.ui.addTransaction
 
 import android.os.Bundle
 import android.view.LayoutInflater

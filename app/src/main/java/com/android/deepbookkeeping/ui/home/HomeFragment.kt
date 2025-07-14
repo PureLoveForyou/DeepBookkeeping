@@ -7,11 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.commit
+import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.adapter.TransactionAdapter
 import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Transaction
 import com.android.deepbookkeeping.databinding.FragmentHomeBinding
-import com.android.deepbookkeeping.ui.bottomsheet.AddTransactionDialogFragment
+import com.android.deepbookkeeping.ui.addTransaction.AddTransactionDialogFragment
+import com.android.deepbookkeeping.ui.addTransaction.AddTransactionFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,32 +34,44 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.addTransactionFab.setOnClickListener {
-            val dialog = AddTransactionDialogFragment().apply {
-                setOnTransactionAddedListener(object :
-                    AddTransactionDialogFragment.OnTransactionAddedListener {
-                    override fun onTransactionAdded(
-                        amount: Double,
-                        description: String,
-                        type: Int,
-                        category: String
-                    ) {
-                        viewModel.insertTransaction(
-                            Transaction(
-                                amount = amount,
-                                category = category,
-                                type = type,
-                                description = description,
-                                date = System.currentTimeMillis()
-                            )
-                        )
-                    }
-                })
-            }
-            dialog.show(parentFragmentManager, AddTransactionDialogFragment.TAG)
+            showBottomSheetDialog()
+//            showAddTransactionFragment()
         }
         initObserver()
         initRecyclerView()
         return binding.root
+    }
+
+    private fun showAddTransactionFragment() {
+        requireActivity().supportFragmentManager.commit {
+            addToBackStack(AddTransactionFragment.TAG)
+            add(R.id.fullscreen_container, AddTransactionFragment.newInstance())
+        }
+    }
+
+    private fun showBottomSheetDialog() {
+        val dialog = AddTransactionDialogFragment().apply {
+            setOnTransactionAddedListener(object :
+                AddTransactionDialogFragment.OnTransactionAddedListener {
+                override fun onTransactionAdded(
+                    amount: Double,
+                    description: String,
+                    type: Int,
+                    category: String
+                ) {
+                    viewModel.insertTransaction(
+                        Transaction(
+                            amount = amount,
+                            category = category,
+                            type = type,
+                            description = description,
+                            date = System.currentTimeMillis()
+                        )
+                    )
+                }
+            })
+        }
+        dialog.show(parentFragmentManager, AddTransactionDialogFragment.TAG)
     }
 
     private fun initRecyclerView() {

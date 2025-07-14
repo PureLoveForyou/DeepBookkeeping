@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="toolbar">#000000</color>
     <color name="navigation_background">#CC31283E</color>
+    <color name="add_transaction_background_color">#000000</color>
 </resources>

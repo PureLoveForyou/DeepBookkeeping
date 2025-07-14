@@ -7,4 +7,5 @@
     <color name="toolbar">#FFFFFF</color>
     <color name="chip_icon_tint">#4CAF50</color>
     <color name="navigation_background">#FFFFFFFF</color>
+    <color name="add_transaction_background_color">#ffffff</color>
 </resources>
