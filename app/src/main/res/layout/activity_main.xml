@@ -48,4 +48,10 @@
             android:background="@color/navigation_background"
             app:menu="@menu/menu" />
     </com.google.android.material.card.MaterialCardView>
+
+    <FrameLayout
+        android:id="@+id/fullscreen_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/fullscreen_fragment_elevation_height" />
 </androidx.constraintlayout.widget.ConstraintLayout>

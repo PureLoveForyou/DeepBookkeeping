@@ -1,6 +1,7 @@
 package com.android.deepbookkeeping
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -19,14 +20,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.navigation_view)) { view, insets ->
             val navigationBar = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
             view.setPadding(navigationBar.left, navigationBar.top, navigationBar.right, 0)
+            insets
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.navigation_view_container)) { view, insets ->
+            val navigationBar = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            (view.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = navigationBar.bottom
+            insets
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.tool_bar)) { view, insets ->
+            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setPadding(0, statusBars.top, 0, 0)
             insets
         }
         val toolbar = findViewById<Toolbar>(R.id.tool_bar)
