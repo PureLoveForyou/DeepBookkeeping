@@ -61,7 +61,12 @@ class CategoryTabFragment : Fragment() {
                 Category(3, "晚餐", R.drawable.ic_food, Constants.TRANSACTION_EXPENSE),
                 Category(4, "交通", R.drawable.ic_transport, Constants.TRANSACTION_EXPENSE),
                 Category(5, "购物", R.drawable.ic_shopping, Constants.TRANSACTION_EXPENSE),
-                Category(6, "其他", R.drawable.ic_other, Constants.TRANSACTION_EXPENSE)
+                Category(6, "其他", R.drawable.ic_other, Constants.TRANSACTION_EXPENSE),
+                Category(7, "其他", R.drawable.ic_other, Constants.TRANSACTION_EXPENSE),
+                Category(8, "其他", R.drawable.ic_other, Constants.TRANSACTION_EXPENSE),
+                Category(9, "其他", R.drawable.ic_other, Constants.TRANSACTION_EXPENSE),
+                Category(10, "其他", R.drawable.ic_other, Constants.TRANSACTION_EXPENSE),
+                Category(11, "其他", R.drawable.ic_other, Constants.TRANSACTION_EXPENSE),
             )
         } else {
             return arrayListOf(
