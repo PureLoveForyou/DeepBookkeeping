@@ -8,20 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.databinding.CategoryItemRecyclerItemBinding
 
-class CategoryAdapter :
+class CategoryAdapter(private val onItemClickListener: ((Category) -> Unit)) :
     ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
 
     class CategoryViewHolder(private val binding: CategoryItemRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(category: Category) {
+        fun bind(category: Category, onItemClick: (Category) -> Unit) {
             binding.apply {
                 categoryIcon.setImageResource(category.iconResourceId)
                 categoryTitle.text = category.name
+                root.setOnClickListener {
+                    onItemClick(category)
+                }
             }
         }
     }
 
-   private class CategoryDiffCallback : DiffUtil.ItemCallback<Category>() {
+    private class CategoryDiffCallback : DiffUtil.ItemCallback<Category>() {
         override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
             return oldItem.id == newItem.id
         }
@@ -38,6 +41,6 @@ class CategoryAdapter :
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), onItemClickListener)
     }
 }

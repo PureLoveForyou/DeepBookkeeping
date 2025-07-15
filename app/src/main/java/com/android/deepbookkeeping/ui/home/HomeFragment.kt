@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.adapter.TransactionAdapter
 import com.android.deepbookkeeping.data.constants.Constants
+import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.data.local.entity.Transaction
 import com.android.deepbookkeeping.databinding.FragmentHomeBinding
 import com.android.deepbookkeeping.ui.addTransaction.AddTransactionDialogFragment
@@ -34,8 +35,8 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.addTransactionFab.setOnClickListener {
-            showBottomSheetDialog()
-//            showAddTransactionFragment()
+//            showBottomSheetDialog()
+            showAddTransactionFragment()
         }
         initObserver()
         initRecyclerView()
@@ -45,7 +46,27 @@ class HomeFragment : Fragment() {
     private fun showAddTransactionFragment() {
         requireActivity().supportFragmentManager.commit {
             addToBackStack(AddTransactionFragment.TAG)
-            add(R.id.fullscreen_container, AddTransactionFragment.newInstance())
+            add(R.id.fullscreen_container, AddTransactionFragment.newInstance().apply {
+                setOnTransactionAddedListener(object :
+                    AddTransactionFragment.OnTransactionAddedListener {
+                    override fun onTransactionAdded(
+                        amount: Double,
+                        description: String,
+                        category: Category
+                    ) {
+                        viewModel.insertTransaction(
+                            Transaction(
+                                amount = amount,
+                                category = category.name,
+                                type = category.type,
+                                description = description,
+                                date = System.currentTimeMillis(),
+                                categoryResourceId = category.iconResourceId
+                            )
+                        )
+                    }
+                })
+            })
         }
     }
 
@@ -65,7 +86,8 @@ class HomeFragment : Fragment() {
                             category = category,
                             type = type,
                             description = description,
-                            date = System.currentTimeMillis()
+                            date = System.currentTimeMillis(),
+                            categoryResourceId = R.drawable.ic_other
                         )
                     )
                 }

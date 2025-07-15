@@ -1,14 +1,17 @@
 package com.android.deepbookkeeping.ui.addTransaction
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.transition.TransitionInflater
 import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.adapter.CategoryViewPager2Adapter
 import com.android.deepbookkeeping.data.constants.Constants
+import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.databinding.FragmentAddTransactionBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -16,7 +19,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
-private lateinit var binding: FragmentAddTransactionBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -27,6 +29,22 @@ class AddTransactionFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var binding: FragmentAddTransactionBinding
+    private var selectedCategory: Category? = null
+
+    interface OnTransactionAddedListener {
+        fun onTransactionAdded(
+            amount: Double,
+            description: String,
+            category: Category
+        )
+    }
+
+    private var listener: OnTransactionAddedListener? = null
+
+    fun setOnTransactionAddedListener(listener: OnTransactionAddedListener) {
+        this.listener = listener
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +63,49 @@ class AddTransactionFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentAddTransactionBinding.inflate(inflater, container, false)
         initViewPager2()
+        initClickListener()
         return binding.root
     }
 
+    private fun initClickListener() {
+        binding.cancelButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+        binding.saveButton.setOnClickListener {
+            saveTransaction()
+        }
+    }
+
+    private fun saveTransaction() {
+        val amountText = binding.etAmount.text.toString()
+        if (amountText.isEmpty()) {
+            binding.etAmount.error = "请输入金额"
+            return
+        }
+
+        val amount = amountText.toDoubleOrNull()
+        if (amount == null || amount <= 0) {
+            binding.etAmount.error = "请输入有效的金额"
+            return
+        }
+
+        val description = binding.etDescription.text.toString().trim()
+        if (description.isEmpty()) {
+            binding.etDescription.error = "请输入描述"
+            return
+        }
+        selectedCategory?.let {
+            listener?.onTransactionAdded(amount, description, it)
+            parentFragmentManager.popBackStack()
+        } ?: Toast.makeText(requireContext(), "请选择一种类别", Toast.LENGTH_SHORT).show()
+    }
+
     private fun initViewPager2() {
-        binding.categoryViewpager2.adapter = CategoryViewPager2Adapter(this)
+        val viewPager2Adapter = CategoryViewPager2Adapter(this) { category: Category ->
+            selectedCategory = category
+            Log.d(TAG, "选中类别: $category")
+        }
+        binding.categoryViewpager2.adapter = viewPager2Adapter
         TabLayoutMediator(binding.categoryTabLayout, binding.categoryViewpager2) { tab, position ->
             tab.text =
                 if (position == 0) getString(R.string.category_expense) else getString(R.string.category_income)

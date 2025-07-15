@@ -14,5 +14,6 @@ data class Transaction(
     var description: String? = null,
     var date: Long, // 使用时间戳
     var type: Int, // 0=支出, 1=收入
-    var createdAt: Long = System.currentTimeMillis()
+    var createdAt: Long = System.currentTimeMillis(),
+    var categoryResourceId: Int
 )
