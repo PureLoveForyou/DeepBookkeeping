@@ -133,10 +133,6 @@ class AddTransactionFragment : Fragment() {
         }
 
         val description = binding.etDescription.text.toString().trim()
-        if (description.isEmpty()) {
-            binding.etDescription.error = "请输入描述"
-            return
-        }
         val timestamp = DateAndTimeUtils.getTimeStamp(
             binding.editTransactionDate.text.toString().trim(),
             binding.editTransactionTime.text.toString().trim()
