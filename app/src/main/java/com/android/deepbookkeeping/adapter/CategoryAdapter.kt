@@ -10,15 +10,24 @@ import com.android.deepbookkeeping.databinding.CategoryItemRecyclerItemBinding
 
 class CategoryAdapter(private val onItemClickListener: ((Category) -> Unit)) :
     ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
+    private var selectedPosition = -1
 
-    class CategoryViewHolder(private val binding: CategoryItemRecyclerItemBinding) :
+    inner class CategoryViewHolder(private val binding: CategoryItemRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(category: Category, onItemClick: (Category) -> Unit) {
             binding.apply {
                 categoryIcon.setImageResource(category.iconResourceId)
                 categoryTitle.text = category.name
+                root.isChecked = (adapterPosition == selectedPosition)
                 root.setOnClickListener {
                     onItemClick(category)
+                    // 点击不同Item时才更新选中框
+                    if (selectedPosition != adapterPosition) {
+                        val previousPos = selectedPosition
+                        selectedPosition = adapterPosition
+                        if (previousPos != RecyclerView.NO_POSITION) notifyItemChanged(previousPos)
+                        notifyItemChanged(selectedPosition)
+                    }
                 }
             }
         }

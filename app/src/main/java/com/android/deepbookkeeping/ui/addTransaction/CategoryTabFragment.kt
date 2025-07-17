@@ -26,6 +26,7 @@ class CategoryTabFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var categoryType: Int? = null
     private lateinit var binding: FragmentCategoryTabBinding
+    private var currentSelectedCategory: Category? = null
 
     interface OnCategorySelectedListener {
         fun onCategorySelected(category: Category)
@@ -50,8 +51,17 @@ class CategoryTabFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        currentSelectedCategory?.let {
+            Log.d(TAG, "Update selected category because of tab switched")
+            categorySelectedListener?.onCategorySelected(it)
+        }
+    }
+
     private fun initRecyclerView() {
         val categoryAdapter = CategoryAdapter() { category ->
+            currentSelectedCategory = category
             categorySelectedListener?.onCategorySelected(category)
             Log.d(TAG, "选中类别: $category")
         }
