@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="my_primary">#DAE0F7</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="toolbar">#000000</color>
-    <color name="navigation_background">#CC31283E</color>
+    <color name="navigation_background">#1F212B</color>
     <color name="add_transaction_background_color">#000000</color>
+    <color name="color_fab">#AFC4FD</color>
+    <color name="color_transaction_card_background">#292A2F</color>
+    <color name="color_statistic_card_background">#1F212B</color>
+    <color name="tab_layout_background">#000000</color>
 </resources>

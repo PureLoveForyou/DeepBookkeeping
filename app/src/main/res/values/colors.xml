@@ -2,10 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="my_primary">#308ED9</color>
+    <color name="my_primary">#465C91</color>
     <color name="addExpense">#673AB7</color>
     <color name="toolbar">#FFFFFF</color>
     <color name="chip_icon_tint">#4CAF50</color>
-    <color name="navigation_background">#FFFFFFFF</color>
+    <color name="navigation_background">#EDEFF4</color>
     <color name="add_transaction_background_color">#ffffff</color>
+    <color name="color_fab">#D7E0FD</color>
+    <color name="color_transaction_card_background">#E6E5ED</color>
+    <color name="color_statistic_card_background">#EDEFF4</color>
+    <color name="tab_layout_background">#ffffff</color>
 </resources>

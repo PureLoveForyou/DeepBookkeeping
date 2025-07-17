@@ -105,7 +105,8 @@
         android:id="@+id/category_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_marginVertical="10dp"
+        android:background="@color/tab_layout_background" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/category_viewpager2"
