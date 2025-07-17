@@ -13,7 +13,12 @@ import com.android.deepbookkeeping.adapter.CategoryViewPager2Adapter
 import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.databinding.FragmentAddTransactionBinding
+import com.android.deepbookkeeping.utils.DateAndTimeUtils
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
+import java.util.Calendar
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +40,7 @@ class AddTransactionFragment : Fragment() {
     interface OnTransactionAddedListener {
         fun onTransactionAdded(
             amount: Double,
+            timestamp: Long,
             description: String,
             category: Category
         )
@@ -62,9 +68,19 @@ class AddTransactionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentAddTransactionBinding.inflate(inflater, container, false)
+        initView()
         initViewPager2()
         initClickListener()
         return binding.root
+    }
+
+    private fun initView() {
+        val calendar = Calendar.getInstance()
+        binding.editTransactionDate.text = DateAndTimeUtils.formatDate(calendar.timeInMillis)
+        binding.editTransactionTime.text = DateAndTimeUtils.formatTime(
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE)
+        )
     }
 
     private fun initClickListener() {
@@ -73,6 +89,33 @@ class AddTransactionFragment : Fragment() {
         }
         binding.saveButton.setOnClickListener {
             saveTransaction()
+        }
+        binding.editTransactionDate.setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText(getString(R.string.choose_date))
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+            datePicker.addOnPositiveButtonClickListener { selection ->
+                binding.editTransactionDate.text = DateAndTimeUtils.formatDate(selection)
+            }
+            datePicker.show(childFragmentManager, "DATE_PICKER")
+        }
+        binding.editTransactionTime.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
+            val timePicker = MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setHour(hour)
+                .setMinute(minute)
+                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .setTitleText(getString(R.string.choose_time))
+                .build()
+            timePicker.addOnPositiveButtonClickListener {
+                binding.editTransactionTime.text =
+                    DateAndTimeUtils.formatTime(timePicker.hour, timePicker.minute)
+            }
+            timePicker.show(childFragmentManager, "TIME_PICKER")
         }
     }
 
@@ -94,8 +137,12 @@ class AddTransactionFragment : Fragment() {
             binding.etDescription.error = "请输入描述"
             return
         }
+        val timestamp = DateAndTimeUtils.getTimeStamp(
+            binding.editTransactionDate.text.toString().trim(),
+            binding.editTransactionTime.text.toString().trim()
+        ) ?: System.currentTimeMillis()
         selectedCategory?.let {
-            listener?.onTransactionAdded(amount, description, it)
+            listener?.onTransactionAdded(amount, timestamp, description, it)
             parentFragmentManager.popBackStack()
         } ?: Toast.makeText(requireContext(), "请选择一种类别", Toast.LENGTH_SHORT).show()
     }

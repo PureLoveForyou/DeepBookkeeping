@@ -5,4 +5,11 @@
     <string name="title_settings">Settings</string>
     <string name="category_income">收入</string>
     <string name="category_expense">支出</string>
+    <string name="choose_date">选择日期</string>
+    <string name="choose_time">选择时间</string>
+    <string name="add_transaction">添加交易记录</string>
+    <string name="remark">备注</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="amount">金额</string>
 </resources>

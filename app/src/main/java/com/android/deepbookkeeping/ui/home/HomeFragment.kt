@@ -51,6 +51,7 @@ class HomeFragment : Fragment() {
                     AddTransactionFragment.OnTransactionAddedListener {
                     override fun onTransactionAdded(
                         amount: Double,
+                        timestamp: Long,
                         description: String,
                         category: Category
                     ) {
@@ -60,7 +61,7 @@ class HomeFragment : Fragment() {
                                 category = category.name,
                                 type = category.type,
                                 description = description,
-                                date = System.currentTimeMillis(),
+                                date = timestamp,
                                 categoryResourceId = category.iconResourceId
                             )
                         )
