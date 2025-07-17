@@ -14,7 +14,6 @@ import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.data.local.entity.Transaction
 import com.android.deepbookkeeping.databinding.FragmentHomeBinding
-import com.android.deepbookkeeping.ui.addTransaction.AddTransactionDialogFragment
 import com.android.deepbookkeeping.ui.addTransaction.AddTransactionFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +34,6 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.addTransactionFab.setOnClickListener {
-//            showBottomSheetDialog()
             showAddTransactionFragment()
         }
         initObserver()
@@ -69,32 +67,6 @@ class HomeFragment : Fragment() {
                 })
             })
         }
-    }
-
-    private fun showBottomSheetDialog() {
-        val dialog = AddTransactionDialogFragment().apply {
-            setOnTransactionAddedListener(object :
-                AddTransactionDialogFragment.OnTransactionAddedListener {
-                override fun onTransactionAdded(
-                    amount: Double,
-                    description: String,
-                    type: Int,
-                    category: String
-                ) {
-                    viewModel.insertTransaction(
-                        Transaction(
-                            amount = amount,
-                            category = category,
-                            type = type,
-                            description = description,
-                            date = System.currentTimeMillis(),
-                            categoryResourceId = R.drawable.ic_other
-                        )
-                    )
-                }
-            })
-        }
-        dialog.show(parentFragmentManager, AddTransactionDialogFragment.TAG)
     }
 
     private fun initRecyclerView() {
