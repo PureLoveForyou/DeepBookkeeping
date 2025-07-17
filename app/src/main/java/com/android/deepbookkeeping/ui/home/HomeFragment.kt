@@ -83,5 +83,24 @@ class HomeFragment : Fragment() {
                 transactions
             )
         })
+        viewModel.getTodayIncome().observe(viewLifecycleOwner) { income ->
+            binding.todayIncomeTextView.text = formatAmount(income ?: 0.0)
+        }
+        viewModel.getTodayExpense().observe(viewLifecycleOwner) { expense ->
+            binding.todayExpenseTextView.text = formatAmount(expense ?: 0.0)
+        }
+        // 观察本月收入
+        viewModel.getMonthIncome().observe(viewLifecycleOwner) { income ->
+            binding.monthIncomeTextView.text = formatAmount(income ?: 0.0)
+        }
+        // 观察本月支出
+        viewModel.getMonthExpense().observe(viewLifecycleOwner) { expense ->
+            binding.monthExpenseTextView.text = formatAmount(expense ?: 0.0)
+        }
+    }
+
+    // 格式化金额显示（添加¥符号和两位小数）
+    private fun formatAmount(amount: Double): String {
+        return "¥%.2f".format(amount)
     }
 }

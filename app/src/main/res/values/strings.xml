@@ -12,4 +12,9 @@
     <string name="cancel">取消</string>
     <string name="save">保存</string>
     <string name="amount">金额</string>
+    <string name="statistic">统计</string>
+    <string name="todayIncome">今日收入</string>
+    <string name="todayExpense">今日支出</string>
+    <string name="monthIncome">本月收入</string>
+    <string name="monthExpense">本月支出</string>
 </resources>

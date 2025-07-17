@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
@@ -28,7 +28,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="今日统计"
+                    android:text="@string/statistic"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -47,14 +47,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="收入"
+                            android:text="@string/todayIncome"
                             android:textColor="#4CAF50" />
 
                         <TextView
                             android:id="@+id/todayIncomeTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="¥0.00"
                             android:textSize="20sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -68,14 +67,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="支出"
+                            android:text="@string/todayExpense"
                             android:textColor="#F44336" />
 
                         <TextView
                             android:id="@+id/todayExpenseTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="¥0.00"
                             android:textSize="20sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -96,14 +94,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="本月收入"
+                            android:text="@string/monthIncome"
                             android:textColor="#4CAF50" />
 
                         <TextView
                             android:id="@+id/monthIncomeTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="¥0.00"
                             android:textSize="16sp" />
                     </LinearLayout>
 
@@ -116,14 +113,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="本月支出"
+                            android:text="@string/monthExpense"
                             android:textColor="#F44336" />
 
                         <TextView
                             android:id="@+id/monthExpenseTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="¥0.00"
                             android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>
