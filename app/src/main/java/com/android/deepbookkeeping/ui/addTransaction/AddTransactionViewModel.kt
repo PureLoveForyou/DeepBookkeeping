@@ -16,4 +16,9 @@ class AddTransactionViewModel @Inject constructor(private val repository: Accoun
             repository.insert(transaction)
         }
     }
+    fun updateTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            repository.update(transaction)
+        }
+    }
 }

@@ -54,21 +54,29 @@ class TransactionDetailFragment : Fragment() {
     }
 
     private fun initView() {
-        selectedTransaction?.let {
-            binding.transactionIcon.setImageResource(it.category.iconResourceId)
-            val amountText =
-                if (it.transaction.type == Constants.TRANSACTION_EXPENSE) "- " + it.transaction.amount else it.transaction.amount.toString()
-            binding.transactionAmount.text = amountText
-            binding.categoryText.text = it.category.name
-            binding.transactionTime.text = DateAndTimeUtils.formatDateAndTime(it.transaction.date)
-            binding.transactionRemark.text = it.transaction.description
-            binding.transactionType.text =
-                if (it.transaction.type == Constants.TRANSACTION_EXPENSE)
-                    getString(R.string.category_expense)
-                else getString(
-                    R.string.category_income
-                )
+        selectedTransaction?.let { item ->
+            updateView(item)
+            viewmodel.getTransactionWithCategory(item.transaction.id).observe(viewLifecycleOwner) {
+                updateView(it)
+            }
         }
+    }
+
+    private fun updateView(item: TransactionWithCategory) {
+        binding.transactionIcon.setImageResource(item.category.iconResourceId)
+        val amountText =
+            if (item.transaction.type == Constants.TRANSACTION_EXPENSE) "- " + item.transaction.amount else item.transaction.amount.toString()
+        binding.transactionAmount.text = amountText
+        binding.categoryText.text = item.category.name
+        binding.transactionTime.text =
+            DateAndTimeUtils.formatDateAndTime(item.transaction.date)
+        binding.transactionRemark.text = item.transaction.description
+        binding.transactionType.text =
+            if (item.transaction.type == Constants.TRANSACTION_EXPENSE)
+                getString(R.string.category_expense)
+            else getString(
+                R.string.category_income
+            )
     }
 
     private fun initClickListener() {
@@ -110,7 +118,7 @@ class TransactionDetailFragment : Fragment() {
     }
 
     companion object {
-        const val TAG = Constants.TAG_PREFIX + "EditTransactionFragment"
+        const val TAG = Constants.TAG_PREFIX + "TransactionDetailFragment"
 
         /**
          * Use this factory method to create a new instance of

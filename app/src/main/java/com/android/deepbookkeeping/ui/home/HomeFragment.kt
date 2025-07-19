@@ -68,6 +68,7 @@ class HomeFragment : Fragment() {
     private fun initObserver() {
         viewModel.getAllTransactionWithCategories().observe(viewLifecycleOwner) { transactions ->
             Log.d(TAG, "transactions' size = ${transactions?.size}")
+            Log.d(TAG, "transactions' size = ${transactions}")
             (binding.transactionsRecyclerView.adapter as? TransactionAdapter)?.submitList(
                 transactions
             )

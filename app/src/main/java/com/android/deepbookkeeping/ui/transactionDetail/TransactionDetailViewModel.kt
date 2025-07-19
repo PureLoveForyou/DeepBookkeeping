@@ -1,8 +1,10 @@
 package com.android.deepbookkeeping.ui.transactionDetail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
 import com.android.deepbookkeeping.data.repository.AccountingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,4 +18,7 @@ class TransactionDetailViewModel @Inject constructor(private val repository: Acc
             repository.delete(transaction)
         }
     }
+
+    fun getTransactionWithCategory(id: Int): LiveData<TransactionWithCategory> =
+        repository.getTransactionWithCategoriesById(id)
 }

@@ -16,5 +16,9 @@ class AccountingRepository(private val appDao: AppDao) {
         appDao.getTotalAmount(type, startTime, endTime)
 
     fun getCategoriesByType(type: Int) = appDao.getCategoriesByType(type)
+
     fun getAllTransactionWithCategories() = appDao.getAllTransactionWithCategories()
+
+    fun getTransactionWithCategoriesById(id: Int) =
+        appDao.getTransactionWithCategoriesById(id)
 }

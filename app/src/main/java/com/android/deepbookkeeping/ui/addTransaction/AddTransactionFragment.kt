@@ -40,6 +40,7 @@ class AddTransactionFragment : Fragment() {
     private lateinit var binding: FragmentAddTransactionBinding
     private var selectedCategory: Category? = null
     private val viewmodel: AddTransactionViewModel by viewModels()
+    private var updateMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,7 @@ class AddTransactionFragment : Fragment() {
         }
         enterTransition =
             TransitionInflater.from(requireContext()).inflateTransition(R.transition.slide_bottom)
+        updateMode = currentTransaction != null
     }
 
     override fun onCreateView(
@@ -75,6 +77,7 @@ class AddTransactionFragment : Fragment() {
             binding.etDescription.setText(it.transaction.description)
             if (it.transaction.type == Constants.TRANSACTION_EXPENSE) {
                 binding.categoryViewpager2.setCurrentItem(0, true)
+                binding.categoryViewpager2.currentItem
             } else {
                 binding.categoryViewpager2.setCurrentItem(1, true)
             }
@@ -138,15 +141,27 @@ class AddTransactionFragment : Fragment() {
             binding.editTransactionTime.text.toString().trim()
         ) ?: System.currentTimeMillis()
         selectedCategory?.let {
-            viewmodel.insertTransaction(
-                Transaction(
+            if (updateMode) {
+                currentTransaction?.transaction?.let { item ->
+                    item.amount = amount
+                    item.description = description
+                    item.categoryId = it.id
+                    item.type = it.type
+                    item.date = timestamp
+                    Log.d(TAG, "updateTransaction：$item")
+                    viewmodel.updateTransaction(item)
+                }
+            } else {
+                val transaction = Transaction(
                     amount = amount,
                     type = it.type,
                     description = description,
                     date = timestamp,
                     categoryId = it.id
                 )
-            )
+                viewmodel.insertTransaction(transaction)
+                Log.d(TAG, "newTransaction：$transaction")
+            }
             parentFragmentManager.popBackStack()
         } ?: Toast.makeText(requireContext(), "请选择一种类别", Toast.LENGTH_SHORT).show()
     }

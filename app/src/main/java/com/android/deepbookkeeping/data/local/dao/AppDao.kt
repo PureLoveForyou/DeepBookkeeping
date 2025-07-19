@@ -60,6 +60,10 @@ interface AppDao {
     fun getAllTransactionWithCategories(): LiveData<List<TransactionWithCategory>>
 
     @androidx.room.Transaction
+    @Query("SELECT * FROM transactions WHERE id = :id ORDER BY date DESC")
+    fun getTransactionWithCategoriesById(id: Int): LiveData<TransactionWithCategory>
+
+    @androidx.room.Transaction
     @Query("SELECT * FROM transactions WHERE type = :type ORDER BY date DESC")
     fun getTransactionByTypeWithCategories(type: Int): LiveData<List<TransactionWithCategory>>
 }
