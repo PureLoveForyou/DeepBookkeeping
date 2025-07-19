@@ -7,7 +7,7 @@ import java.util.Date
 import java.util.Locale
 
 object DateAndTimeUtils {
-    const val TAG = Constants.TAG_PREFIX + "DateAndTimeUtils"
+    private const val TAG = Constants.TAG_PREFIX + "DateAndTimeUtils"
 
     @JvmStatic
     fun formatDate(timestamp: Long): String {
@@ -18,6 +18,16 @@ object DateAndTimeUtils {
     @JvmStatic
     fun formatTime(hour: Int, minute: Int): String {
         return String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
+    }
+
+    @JvmStatic
+    fun formatTime(timestamp: Long): String {
+        return SimpleDateFormat("HH:mm", Locale.getDefault()).format(timestamp)
+    }
+
+    @JvmStatic
+    fun formatDateAndTime(timestamp: Long): String {
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(timestamp)
     }
 
     @JvmStatic

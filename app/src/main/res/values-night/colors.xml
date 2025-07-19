@@ -10,4 +10,6 @@
     <color name="color_transaction_card_background">#292A2F</color>
     <color name="color_statistic_card_background">#1F212B</color>
     <color name="tab_layout_background">#000000</color>
+    <color name="edit_fragment_background">#000000</color>
+    <color name="dividing_line_horizontal">#ffffff</color>
 </resources>

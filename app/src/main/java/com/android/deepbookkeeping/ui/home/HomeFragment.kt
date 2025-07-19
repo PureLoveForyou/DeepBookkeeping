@@ -15,6 +15,7 @@ import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.data.local.entity.Transaction
 import com.android.deepbookkeeping.databinding.FragmentHomeBinding
 import com.android.deepbookkeeping.ui.addTransaction.AddTransactionFragment
+import com.android.deepbookkeeping.ui.transactionDetail.TransactionDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,7 +45,7 @@ class HomeFragment : Fragment() {
     private fun showAddTransactionFragment() {
         requireActivity().supportFragmentManager.commit {
             addToBackStack(AddTransactionFragment.TAG)
-            add(R.id.fullscreen_container, AddTransactionFragment.newInstance().apply {
+            add(R.id.fullscreen_container, AddTransactionFragment.newInstance(null).apply {
                 setOnTransactionAddedListener(object :
                     AddTransactionFragment.OnTransactionAddedListener {
                     override fun onTransactionAdded(
@@ -70,9 +71,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        val transactionAdapter = TransactionAdapter() { transaction: Transaction ->
+            Log.d(TAG, "on transaction click: $transaction")
+            showEditTransactionFragment(transaction)
+        }
         binding.transactionsRecyclerView.apply {
-            adapter = TransactionAdapter()
+            adapter = transactionAdapter
             setHasFixedSize(true)
+        }
+    }
+
+    private fun showEditTransactionFragment(transaction: Transaction) {
+        requireActivity().supportFragmentManager.commit {
+            addToBackStack(TransactionDetailFragment.TAG)
+                .add(R.id.fullscreen_container, TransactionDetailFragment.newInstance(transaction))
         }
     }
 

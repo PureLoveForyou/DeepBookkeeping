@@ -10,7 +10,7 @@ import com.android.deepbookkeeping.databinding.CategoryItemRecyclerItemBinding
 
 class CategoryAdapter(private val onItemClickListener: ((Category) -> Unit)) :
     ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
-    private var selectedPosition = -1
+    var selectedPosition = -1
 
     inner class CategoryViewHolder(private val binding: CategoryItemRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

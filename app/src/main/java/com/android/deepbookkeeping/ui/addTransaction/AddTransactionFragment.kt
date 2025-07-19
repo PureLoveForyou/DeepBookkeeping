@@ -12,6 +12,7 @@ import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.adapter.CategoryViewPager2Adapter
 import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Category
+import com.android.deepbookkeeping.data.local.entity.Transaction
 import com.android.deepbookkeeping.databinding.FragmentAddTransactionBinding
 import com.android.deepbookkeeping.utils.DateAndTimeUtils
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -23,7 +24,6 @@ import java.util.Calendar
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -32,8 +32,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class AddTransactionFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var currentTransaction: Transaction? = null
     private lateinit var binding: FragmentAddTransactionBinding
     private var selectedCategory: Category? = null
 
@@ -55,8 +54,7 @@ class AddTransactionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            currentTransaction = it.getParcelable(ARG_PARAM1, Transaction::class.java)
         }
         enterTransition =
             TransitionInflater.from(requireContext()).inflateTransition(R.transition.slide_bottom)
@@ -65,12 +63,12 @@ class AddTransactionFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentAddTransactionBinding.inflate(inflater, container, false)
-        initView()
         initViewPager2()
         initClickListener()
+        initView()
         return binding.root
     }
 
@@ -81,6 +79,18 @@ class AddTransactionFragment : Fragment() {
             calendar.get(Calendar.HOUR_OF_DAY),
             calendar.get(Calendar.MINUTE)
         )
+        // 如果传进来的参数有transaction，则为编辑模式
+        currentTransaction?.let {
+            binding.etAmount.setText(it.amount.toString())
+            binding.etDescription.setText(it.description)
+            if (it.type == Constants.TRANSACTION_EXPENSE) {
+                binding.categoryViewpager2.setCurrentItem(0, true)
+            } else {
+                binding.categoryViewpager2.setCurrentItem(1, true)
+            }
+            binding.editTransactionDate.text = DateAndTimeUtils.formatDate(it.date)
+            binding.editTransactionTime.text = DateAndTimeUtils.formatTime(it.date)
+        }
     }
 
     private fun initClickListener() {
@@ -162,19 +172,16 @@ class AddTransactionFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
+         * @param transaction Parameter 1.
          * @return A new instance of fragment AddTransactionFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance() =
-//        fun newInstance(param1: String, param2: String) =
+        fun newInstance(transaction: Transaction?) =
             AddTransactionFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
+                arguments = Bundle().apply {
+                    putParcelable(ARG_PARAM1, transaction)
+                }
             }
     }
 }

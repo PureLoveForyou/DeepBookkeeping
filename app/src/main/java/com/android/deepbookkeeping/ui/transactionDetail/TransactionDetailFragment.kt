@@ -1,0 +1,131 @@
+package com.android.deepbookkeeping.ui.transactionDetail
+
+import android.content.DialogInterface
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.commit
+import androidx.fragment.app.viewModels
+import com.android.deepbookkeeping.R
+import com.android.deepbookkeeping.data.constants.Constants
+import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.databinding.FragmentTransactionDetailBinding
+import com.android.deepbookkeeping.ui.addTransaction.AddTransactionFragment
+import com.android.deepbookkeeping.utils.DateAndTimeUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [TransactionDetailFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+@AndroidEntryPoint
+class TransactionDetailFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var selectedTransaction: Transaction? = null
+    private lateinit var binding: FragmentTransactionDetailBinding
+    private val viewmodel: TransactionDetailViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            selectedTransaction = it.getParcelable(ARG_PARAM1, Transaction::class.java)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        Log.d(TAG, "onCreateView")
+        // Inflate the layout for this fragment
+        binding = FragmentTransactionDetailBinding.inflate(inflater, container, false)
+        initView()
+        initClickListener()
+        return binding.root
+    }
+
+    private fun initView() {
+        selectedTransaction?.let {
+            binding.transactionIcon.setImageResource(it.categoryResourceId)
+            val amountText =
+                if (it.type == Constants.TRANSACTION_EXPENSE) "- " + it.amount else it.amount.toString()
+            binding.transactionAmount.text = amountText
+            binding.categoryText.text = it.category
+            binding.transactionTime.text = DateAndTimeUtils.formatDateAndTime(it.date)
+            binding.transactionRemark.text = it.description
+            binding.transactionType.text =
+                if (it.type == Constants.TRANSACTION_EXPENSE)
+                    getString(R.string.category_expense)
+                else getString(
+                    R.string.category_income
+                )
+        }
+    }
+
+    private fun initClickListener() {
+        binding.editTransactionToolbar.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+        binding.deleteTransactionButton.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("提示")
+                .setMessage("确定要删除该条账单吗？删除后不可恢复")
+                .setPositiveButton(R.string.confirm) { dialog, _ ->
+                    deleteTransaction(dialog)
+                }
+                .setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setCancelable(true)
+                .show()
+        }
+        binding.editTransactionButton.setOnClickListener {
+            requireActivity().supportFragmentManager.commit {
+                addToBackStack(AddTransactionFragment.TAG)
+                add(
+                    R.id.fullscreen_container,
+                    AddTransactionFragment.newInstance(selectedTransaction)
+                )
+            }
+        }
+    }
+
+    private fun deleteTransaction(dialog: DialogInterface) {
+        selectedTransaction?.let { transaction ->
+            viewmodel.deleteTransaction(
+                transaction
+            )
+        }
+        dialog.dismiss()
+        requireActivity().supportFragmentManager.popBackStack()
+    }
+
+    companion object {
+        const val TAG = Constants.TAG_PREFIX + "EditTransactionFragment"
+
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param transaction Parameter 1.
+         * @return A new instance of fragment EditTransactionFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(transaction: Transaction) =
+            TransactionDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_PARAM1, transaction)
+                }
+            }
+    }
+}

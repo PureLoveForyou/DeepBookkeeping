@@ -1,11 +1,12 @@
 package com.android.deepbookkeeping.data.local.entity
 
+import android.os.Parcelable
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "transactions")
+@Parcelize
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
@@ -16,4 +17,4 @@ data class Transaction(
     var type: Int, // 0=支出, 1=收入
     var createdAt: Long = System.currentTimeMillis(),
     var categoryResourceId: Int
-)
+) : Parcelable

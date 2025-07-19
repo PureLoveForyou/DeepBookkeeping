@@ -8,25 +8,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Transaction
 import com.android.deepbookkeeping.databinding.ItemTransactionBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.android.deepbookkeeping.utils.DateAndTimeUtils
 
-class TransactionAdapter :
+class TransactionAdapter(private val onItemClick: ((transaction: Transaction) -> Unit)) :
     ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
     class TransactionViewHolder(private val binding: ItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(transaction: Transaction) {
+        fun bind(transaction: Transaction, onItemClick: (transaction: Transaction) -> Unit) {
             binding.apply {
                 binding.categoryIconImageView.setImageResource(transaction.categoryResourceId)
                 binding.amountTextView.text =
                     if (transaction.type == Constants.TRANSACTION_EXPENSE) "-¥" + transaction.amount else "¥" + transaction.amount
                 binding.categoryTextView.text = transaction.category
-                binding.dateTextView.text = SimpleDateFormat(
-                    "yyyy-MM-dd HH:mm:ss",
-                    Locale.getDefault()
-                ).format(transaction.date)
+                binding.dateTextView.text = DateAndTimeUtils.formatDateAndTime(transaction.date)
                 binding.noteTextView.text = transaction.description
+                root.setOnClickListener {
+                    onItemClick(transaction)
+                }
             }
         }
     }
@@ -50,6 +49,6 @@ class TransactionAdapter :
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = getItem(position)
-        holder.bind(transaction)
+        holder.bind(transaction, onItemClick)
     }
 }

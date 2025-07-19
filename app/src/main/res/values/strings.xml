@@ -17,4 +17,8 @@
     <string name="todayExpense">今日支出</string>
     <string name="monthIncome">本月收入</string>
     <string name="monthExpense">本月支出</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="transaction_detail_title">记账详情</string>
+    <string name="confirm">确认</string>
 </resources>
