@@ -11,8 +11,7 @@ import androidx.fragment.app.commit
 import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.adapter.TransactionAdapter
 import com.android.deepbookkeeping.data.constants.Constants
-import com.android.deepbookkeeping.data.local.entity.Category
-import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
 import com.android.deepbookkeeping.databinding.FragmentHomeBinding
 import com.android.deepbookkeeping.ui.addTransaction.AddTransactionFragment
 import com.android.deepbookkeeping.ui.transactionDetail.TransactionDetailFragment
@@ -45,43 +44,21 @@ class HomeFragment : Fragment() {
     private fun showAddTransactionFragment() {
         requireActivity().supportFragmentManager.commit {
             addToBackStack(AddTransactionFragment.TAG)
-            add(R.id.fullscreen_container, AddTransactionFragment.newInstance(null).apply {
-                setOnTransactionAddedListener(object :
-                    AddTransactionFragment.OnTransactionAddedListener {
-                    override fun onTransactionAdded(
-                        amount: Double,
-                        timestamp: Long,
-                        description: String,
-                        category: Category
-                    ) {
-                        viewModel.insertTransaction(
-                            Transaction(
-                                amount = amount,
-                                category = category.name,
-                                type = category.type,
-                                description = description,
-                                date = timestamp,
-                                categoryResourceId = category.iconResourceId
-                            )
-                        )
-                    }
-                })
-            })
+            add(R.id.fullscreen_container, AddTransactionFragment.newInstance(null))
         }
     }
 
     private fun initRecyclerView() {
-        val transactionAdapter = TransactionAdapter() { transaction: Transaction ->
+        val transactionAdapter = TransactionAdapter { transaction ->
             Log.d(TAG, "on transaction click: $transaction")
             showEditTransactionFragment(transaction)
         }
         binding.transactionsRecyclerView.apply {
             adapter = transactionAdapter
-            setHasFixedSize(true)
         }
     }
 
-    private fun showEditTransactionFragment(transaction: Transaction) {
+    private fun showEditTransactionFragment(transaction: TransactionWithCategory) {
         requireActivity().supportFragmentManager.commit {
             addToBackStack(TransactionDetailFragment.TAG)
                 .add(R.id.fullscreen_container, TransactionDetailFragment.newInstance(transaction))
@@ -89,12 +66,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun initObserver() {
-        viewModel.getAllTransactions().observe(viewLifecycleOwner, { transactions ->
+        viewModel.getAllTransactionWithCategories().observe(viewLifecycleOwner) { transactions ->
             Log.d(TAG, "transactions' size = ${transactions?.size}")
             (binding.transactionsRecyclerView.adapter as? TransactionAdapter)?.submitList(
                 transactions
             )
-        })
+        }
         viewModel.getTodayIncome().observe(viewLifecycleOwner) { income ->
             binding.todayIncomeTextView.text = formatAmount(income ?: 0.0)
         }

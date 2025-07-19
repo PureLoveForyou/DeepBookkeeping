@@ -6,7 +6,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
 
 @Dao
 interface AppDao {
@@ -20,12 +22,7 @@ interface AppDao {
     @Delete
     suspend fun delete(transaction: Transaction)
 
-    @Query(
-        """
-        SELECT * FROM transactions
-        ORDER BY date DESC
-    """
-    )
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAllTransactions(): LiveData<List<Transaction>>
 
     @Query(
@@ -40,4 +37,29 @@ interface AppDao {
         startDate: Long,
         endDate: Long
     ): LiveData<Double?>
+
+    // 类别操作
+    @Insert
+    suspend fun insert(category: Category): Long
+
+    @Update
+    suspend fun update(category: Category)
+
+    @Delete
+    suspend fun delete(category: Category)
+
+    @Query("SELECT * FROM categories")
+    fun getAllCategories(): LiveData<List<Category>>
+
+    @Query("SELECT * FROM categories WHERE type = :type")
+    fun getCategoriesByType(type: Int): LiveData<List<Category>>
+
+    // 联合操作
+    @androidx.room.Transaction
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
+    fun getAllTransactionWithCategories(): LiveData<List<TransactionWithCategory>>
+
+    @androidx.room.Transaction
+    @Query("SELECT * FROM transactions WHERE type = :type ORDER BY date DESC")
+    fun getTransactionByTypeWithCategories(type: Int): LiveData<List<TransactionWithCategory>>
 }

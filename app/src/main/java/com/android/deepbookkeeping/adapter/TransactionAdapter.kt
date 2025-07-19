@@ -6,39 +6,38 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.deepbookkeeping.data.constants.Constants
-import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
 import com.android.deepbookkeeping.databinding.ItemTransactionBinding
 import com.android.deepbookkeeping.utils.DateAndTimeUtils
 
-class TransactionAdapter(private val onItemClick: ((transaction: Transaction) -> Unit)) :
-    ListAdapter<Transaction, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
+class TransactionAdapter(private val onItemClick: ((item: TransactionWithCategory) -> Unit)) :
+    ListAdapter<TransactionWithCategory, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
     class TransactionViewHolder(private val binding: ItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(transaction: Transaction, onItemClick: (transaction: Transaction) -> Unit) {
+        fun bind(item: TransactionWithCategory, onItemClick: (item: TransactionWithCategory) -> Unit) {
             binding.apply {
-                binding.categoryIconImageView.setImageResource(transaction.categoryResourceId)
+                binding.categoryIconImageView.setImageResource(item.category.iconResourceId)
                 binding.amountTextView.text =
-                    if (transaction.type == Constants.TRANSACTION_EXPENSE) "-¥" + transaction.amount else "¥" + transaction.amount
-                binding.categoryTextView.text = transaction.category
-                binding.dateTextView.text = DateAndTimeUtils.formatDateAndTime(transaction.date)
-                binding.noteTextView.text = transaction.description
+                    if (item.transaction.type == Constants.TRANSACTION_EXPENSE) "-¥" + item.transaction.amount else "¥" + item.transaction.amount
+                binding.categoryTextView.text = item.category.name
+                binding.dateTextView.text = DateAndTimeUtils.formatDateAndTime(item.transaction.date)
+                binding.noteTextView.text = item.transaction.description
                 root.setOnClickListener {
-                    onItemClick(transaction)
+                    onItemClick(item)
                 }
             }
         }
     }
 
-    private class TransactionDiffCallback : DiffUtil.ItemCallback<Transaction>() {
-        override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-            return oldItem.id == newItem.id
+    private class TransactionDiffCallback : DiffUtil.ItemCallback<TransactionWithCategory>() {
+        override fun areItemsTheSame(oldItem: TransactionWithCategory, newItem: TransactionWithCategory): Boolean {
+            return oldItem.transaction.id == newItem.transaction.id
         }
 
-        override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
+        override fun areContentsTheSame(oldItem: TransactionWithCategory, newItem: TransactionWithCategory): Boolean {
             return oldItem == newItem
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -48,7 +47,7 @@ class TransactionAdapter(private val onItemClick: ((transaction: Transaction) ->
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-        val transaction = getItem(position)
-        holder.bind(transaction, onItemClick)
+        val item = getItem(position)
+        holder.bind(item, onItemClick)
     }
 }

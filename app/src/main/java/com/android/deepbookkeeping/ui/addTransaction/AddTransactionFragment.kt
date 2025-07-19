@@ -7,18 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.adapter.CategoryViewPager2Adapter
 import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
 import com.android.deepbookkeeping.databinding.FragmentAddTransactionBinding
 import com.android.deepbookkeeping.utils.DateAndTimeUtils
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
 // TODO: Rename parameter arguments, choose names that match
@@ -30,31 +33,18 @@ private const val ARG_PARAM1 = "param1"
  * Use the [AddTransactionFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class AddTransactionFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var currentTransaction: Transaction? = null
+    private var currentTransaction: TransactionWithCategory? = null
     private lateinit var binding: FragmentAddTransactionBinding
     private var selectedCategory: Category? = null
-
-    interface OnTransactionAddedListener {
-        fun onTransactionAdded(
-            amount: Double,
-            timestamp: Long,
-            description: String,
-            category: Category
-        )
-    }
-
-    private var listener: OnTransactionAddedListener? = null
-
-    fun setOnTransactionAddedListener(listener: OnTransactionAddedListener) {
-        this.listener = listener
-    }
+    private val viewmodel: AddTransactionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            currentTransaction = it.getParcelable(ARG_PARAM1, Transaction::class.java)
+            currentTransaction = it.getParcelable(ARG_PARAM1, TransactionWithCategory::class.java)
         }
         enterTransition =
             TransitionInflater.from(requireContext()).inflateTransition(R.transition.slide_bottom)
@@ -81,15 +71,15 @@ class AddTransactionFragment : Fragment() {
         )
         // 如果传进来的参数有transaction，则为编辑模式
         currentTransaction?.let {
-            binding.etAmount.setText(it.amount.toString())
-            binding.etDescription.setText(it.description)
-            if (it.type == Constants.TRANSACTION_EXPENSE) {
+            binding.etAmount.setText(it.transaction.amount.toString())
+            binding.etDescription.setText(it.transaction.description)
+            if (it.transaction.type == Constants.TRANSACTION_EXPENSE) {
                 binding.categoryViewpager2.setCurrentItem(0, true)
             } else {
                 binding.categoryViewpager2.setCurrentItem(1, true)
             }
-            binding.editTransactionDate.text = DateAndTimeUtils.formatDate(it.date)
-            binding.editTransactionTime.text = DateAndTimeUtils.formatTime(it.date)
+            binding.editTransactionDate.text = DateAndTimeUtils.formatDate(it.transaction.date)
+            binding.editTransactionTime.text = DateAndTimeUtils.formatTime(it.transaction.date)
         }
     }
 
@@ -148,7 +138,15 @@ class AddTransactionFragment : Fragment() {
             binding.editTransactionTime.text.toString().trim()
         ) ?: System.currentTimeMillis()
         selectedCategory?.let {
-            listener?.onTransactionAdded(amount, timestamp, description, it)
+            viewmodel.insertTransaction(
+                Transaction(
+                    amount = amount,
+                    type = it.type,
+                    description = description,
+                    date = timestamp,
+                    categoryId = it.id
+                )
+            )
             parentFragmentManager.popBackStack()
         } ?: Toast.makeText(requireContext(), "请选择一种类别", Toast.LENGTH_SHORT).show()
     }
@@ -177,7 +175,7 @@ class AddTransactionFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(transaction: Transaction?) =
+        fun newInstance(transaction: TransactionWithCategory?) =
             AddTransactionFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_PARAM1, transaction)

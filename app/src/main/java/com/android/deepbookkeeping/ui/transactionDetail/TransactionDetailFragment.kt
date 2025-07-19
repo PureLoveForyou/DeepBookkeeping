@@ -11,7 +11,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.data.constants.Constants
-import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
 import com.android.deepbookkeeping.databinding.FragmentTransactionDetailBinding
 import com.android.deepbookkeeping.ui.addTransaction.AddTransactionFragment
 import com.android.deepbookkeeping.utils.DateAndTimeUtils
@@ -30,14 +30,14 @@ private const val ARG_PARAM1 = "param1"
 @AndroidEntryPoint
 class TransactionDetailFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var selectedTransaction: Transaction? = null
+    private var selectedTransaction: TransactionWithCategory? = null
     private lateinit var binding: FragmentTransactionDetailBinding
     private val viewmodel: TransactionDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            selectedTransaction = it.getParcelable(ARG_PARAM1, Transaction::class.java)
+            selectedTransaction = it.getParcelable(ARG_PARAM1, TransactionWithCategory::class.java)
         }
     }
 
@@ -55,15 +55,15 @@ class TransactionDetailFragment : Fragment() {
 
     private fun initView() {
         selectedTransaction?.let {
-            binding.transactionIcon.setImageResource(it.categoryResourceId)
+            binding.transactionIcon.setImageResource(it.category.iconResourceId)
             val amountText =
-                if (it.type == Constants.TRANSACTION_EXPENSE) "- " + it.amount else it.amount.toString()
+                if (it.transaction.type == Constants.TRANSACTION_EXPENSE) "- " + it.transaction.amount else it.transaction.amount.toString()
             binding.transactionAmount.text = amountText
-            binding.categoryText.text = it.category
-            binding.transactionTime.text = DateAndTimeUtils.formatDateAndTime(it.date)
-            binding.transactionRemark.text = it.description
+            binding.categoryText.text = it.category.name
+            binding.transactionTime.text = DateAndTimeUtils.formatDateAndTime(it.transaction.date)
+            binding.transactionRemark.text = it.transaction.description
             binding.transactionType.text =
-                if (it.type == Constants.TRANSACTION_EXPENSE)
+                if (it.transaction.type == Constants.TRANSACTION_EXPENSE)
                     getString(R.string.category_expense)
                 else getString(
                     R.string.category_income
@@ -100,9 +100,9 @@ class TransactionDetailFragment : Fragment() {
     }
 
     private fun deleteTransaction(dialog: DialogInterface) {
-        selectedTransaction?.let { transaction ->
+        selectedTransaction?.let { item ->
             viewmodel.deleteTransaction(
-                transaction
+                item.transaction
             )
         }
         dialog.dismiss()
@@ -121,7 +121,7 @@ class TransactionDetailFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(transaction: Transaction) =
+        fun newInstance(transaction: TransactionWithCategory) =
             TransactionDetailFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_PARAM1, transaction)

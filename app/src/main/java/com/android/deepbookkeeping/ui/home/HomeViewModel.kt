@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Transaction
+import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
 import com.android.deepbookkeeping.data.repository.AccountingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ class HomeViewModel @Inject constructor(
     private val repository: AccountingRepository
 ) : ViewModel() {
     fun getAllTransactions(): LiveData<List<Transaction>> = repository.getAllTransactions()
+    fun getAllTransactionWithCategories(): LiveData<List<TransactionWithCategory>> = repository.getAllTransactionWithCategories()
     fun insertTransaction(transaction: Transaction) {
         viewModelScope.launch {
             repository.insert(transaction)

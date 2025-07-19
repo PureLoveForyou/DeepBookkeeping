@@ -19,20 +19,17 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "accounting_database"
-        ).build()
+        return AppDatabase.getDatabase(context)
     }
 
     @Provides
     fun provideAppDao(database: AppDatabase): AppDao {
         return database.appDao()
     }
+
     @Provides
     @Singleton
-    fun provideAccountingRepository(appDao: AppDao):AccountingRepository{
+    fun provideAccountingRepository(appDao: AppDao): AccountingRepository {
         return AccountingRepository(appDao)
     }
 }
