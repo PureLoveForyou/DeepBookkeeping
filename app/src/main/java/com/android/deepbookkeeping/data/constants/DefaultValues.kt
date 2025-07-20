@@ -4,6 +4,21 @@ import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.data.local.entity.Category
 
 object DefaultValues {
+    val add_more_expense = Category(
+        id = 30,
+        name = "添加",
+        iconResourceId = R.drawable.ic_plus,
+        type = Constants.TRANSACTION_EXPENSE,
+        isDefault = true
+    )
+    val add_more_income = Category(
+        id = 8,
+        name = "添加",
+        iconResourceId = R.drawable.ic_plus,
+        type = Constants.TRANSACTION_INCOME,
+        isDefault = true
+    )
+    val hiddenCategory: List<Category> = arrayListOf(add_more_income, add_more_expense)
     val defaultIncomeCategory = Category(
         id = 1,
         name = "薪资",
@@ -63,13 +78,7 @@ object DefaultValues {
             type = Constants.TRANSACTION_INCOME,
             isDefault = true
         ),
-        Category(
-            id = 8,
-            name = "添加",
-            iconResourceId = R.drawable.ic_plus,
-            type = Constants.TRANSACTION_INCOME,
-            isDefault = true
-        ),
+        add_more_income,
         // 支出类别
         defaultExpenseCategory,
         Category(
@@ -212,12 +221,6 @@ object DefaultValues {
             type = Constants.TRANSACTION_EXPENSE,
             isDefault = true
         ),
-        Category(
-            id = 30,
-            name = "添加",
-            iconResourceId = R.drawable.ic_plus,
-            type = Constants.TRANSACTION_EXPENSE,
-            isDefault = true
-        )
+        add_more_expense
     )
 }

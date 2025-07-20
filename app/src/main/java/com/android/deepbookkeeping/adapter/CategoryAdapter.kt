@@ -2,11 +2,13 @@ package com.android.deepbookkeeping.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android.deepbookkeeping.data.constants.Constants
+import com.android.deepbookkeeping.data.constants.DefaultValues
 import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.databinding.CategoryItemRecyclerItemBinding
 
@@ -18,6 +20,12 @@ class CategoryAdapter(private val onItemClickListener: ((Category) -> Unit)) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(category: Category, onItemClick: (Category) -> Unit) {
             binding.apply {
+                if (category in DefaultValues.hiddenCategory) {
+                    binding.root.visibility = View.GONE
+                    return
+                } else {
+                    binding.root.visibility = View.VISIBLE
+                }
                 categoryIcon.setImageResource(category.iconResourceId)
                 categoryTitle.text = category.name
                 root.isChecked = (adapterPosition == selectedPosition)
