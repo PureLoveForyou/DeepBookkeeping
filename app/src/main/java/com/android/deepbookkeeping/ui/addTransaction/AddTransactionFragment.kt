@@ -175,6 +175,7 @@ class AddTransactionFragment : Fragment() {
                 Log.d(TAG, "选中类别: $category")
             }
         binding.categoryViewpager2.adapter = viewPager2Adapter
+        binding.categoryViewpager2.offscreenPageLimit = 3
         TabLayoutMediator(binding.categoryTabLayout, binding.categoryViewpager2) { tab, position ->
             tab.text =
                 if (position == 0) getString(R.string.category_expense) else getString(R.string.category_income)
