@@ -7,6 +7,10 @@
         android:icon="@drawable/ic_bookkeeping_24dp"
         android:title="@string/title_home" />
     <item
+        android:id="@+id/navigation_ai_chat"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/ai_chat" />
+    <item
         android:id="@+id/navigation_report"
         android:icon="@drawable/ic_chart_24dp"
         android:title="@string/title_statistics" />

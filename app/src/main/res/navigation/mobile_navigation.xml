@@ -10,7 +10,11 @@
         android:name="com.android.deepbookkeeping.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
-
+    <fragment
+        android:id="@+id/navigation_ai_chat"
+        android:name="com.android.deepbookkeeping.ui.ai_chat.AIChatFragment"
+        android:label="@string/ai_chat"
+        tools:layout="@layout/fragment_ai_chat" />
     <fragment
         android:id="@+id/navigation_report"
         android:name="com.android.deepbookkeeping.ui.statistics.StatisticsFragment"

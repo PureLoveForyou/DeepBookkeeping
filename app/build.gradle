@@ -58,6 +58,9 @@ dependencies {
     implementation libs.google.dagger.hilt
     ksp libs.google.hilt.compiler
 
+    // LLM
+    implementation libs.tasks.genai
+
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
