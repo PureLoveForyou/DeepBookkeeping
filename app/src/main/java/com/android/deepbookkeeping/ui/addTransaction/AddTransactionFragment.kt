@@ -143,13 +143,16 @@ class AddTransactionFragment : Fragment() {
         selectedCategory?.let {
             if (updateMode) {
                 currentTransaction?.transaction?.let { item ->
-                    item.amount = amount
-                    item.description = description
-                    item.categoryId = it.id
-                    item.type = it.type
-                    item.date = timestamp
-                    Log.d(TAG, "updateTransaction：$item")
-                    viewmodel.updateTransaction(item)
+                    val transaction = Transaction(
+                        id = item.id,
+                        amount = amount,
+                        type = it.type,
+                        description = description,
+                        date = timestamp,
+                        categoryId = it.id
+                    )
+                    viewmodel.updateTransaction(transaction)
+                    Log.d(TAG, "updateTransaction：$transaction")
                 }
             } else {
                 val transaction = Transaction(
