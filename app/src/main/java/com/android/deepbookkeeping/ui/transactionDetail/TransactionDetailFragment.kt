@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.transition.TransitionInflater
 import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.relation.TransactionWithCategory
@@ -39,6 +40,8 @@ class TransactionDetailFragment : Fragment() {
         arguments?.let {
             selectedTransaction = it.getParcelable(ARG_PARAM1, TransactionWithCategory::class.java)
         }
+        enterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(R.transition.slide_right)
     }
 
     override fun onCreateView(
