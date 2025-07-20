@@ -4,15 +4,23 @@ import com.android.deepbookkeeping.R
 import com.android.deepbookkeeping.data.local.entity.Category
 
 object DefaultValues {
+    val defaultIncomeCategory = Category(
+        id = 1,
+        name = "薪资",
+        iconResourceId = R.drawable.ic_salary,
+        type = Constants.TRANSACTION_INCOME,
+        isDefault = true
+    )
+    val defaultExpenseCategory = Category(
+        id = 9,
+        name = "消费",
+        iconResourceId = R.drawable.ic_food,
+        type = Constants.TRANSACTION_EXPENSE,
+        isDefault = true
+    )
     val defaultCategories = listOf(
         // 收入类别
-        Category(
-            id = 1,
-            name = "薪资",
-            iconResourceId = R.drawable.ic_salary,
-            type = Constants.TRANSACTION_INCOME,
-            isDefault = true
-        ),
+        defaultIncomeCategory,
         Category(
             id = 2,
             name = "理财",
@@ -63,13 +71,7 @@ object DefaultValues {
             isDefault = true
         ),
         // 支出类别
-        Category(
-            id = 9,
-            name = "消费",
-            iconResourceId = R.drawable.ic_food,
-            type = Constants.TRANSACTION_EXPENSE,
-            isDefault = true
-        ),
+        defaultExpenseCategory,
         Category(
             id = 10,
             name = "餐饮",

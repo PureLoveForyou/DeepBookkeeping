@@ -167,10 +167,13 @@ class AddTransactionFragment : Fragment() {
     }
 
     private fun initViewPager2() {
-        val viewPager2Adapter = CategoryViewPager2Adapter(this) { category: Category ->
-            selectedCategory = category
-            Log.d(TAG, "选中类别: $category")
-        }
+        // 如果是编辑模式，则传入当前账单的类别id，否则传入null
+        val initialCategoryId = if (updateMode) currentTransaction?.category?.id else null
+        val viewPager2Adapter =
+            CategoryViewPager2Adapter(this, initialCategoryId) { category: Category ->
+                selectedCategory = category
+                Log.d(TAG, "选中类别: $category")
+            }
         binding.categoryViewpager2.adapter = viewPager2Adapter
         TabLayoutMediator(binding.categoryTabLayout, binding.categoryViewpager2) { tab, position ->
             tab.text =

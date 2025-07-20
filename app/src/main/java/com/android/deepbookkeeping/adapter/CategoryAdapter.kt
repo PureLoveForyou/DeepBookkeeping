@@ -1,10 +1,12 @@
 package com.android.deepbookkeeping.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.android.deepbookkeeping.data.constants.Constants
 import com.android.deepbookkeeping.data.local.entity.Category
 import com.android.deepbookkeeping.databinding.CategoryItemRecyclerItemBinding
 
@@ -51,5 +53,23 @@ class CategoryAdapter(private val onItemClickListener: ((Category) -> Unit)) :
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.bind(getItem(position), onItemClickListener)
+    }
+
+    fun selectCategoryById(id: Int): Category? {
+        Log.d(TAG, "selectCategoryById: $id, itemCount: $itemCount")
+        for (i in 0..<itemCount) {
+            val category = getItem(i)
+            if (category.id == id) {
+                Log.d(TAG, "findPos: $i")
+                selectedPosition = i
+                notifyItemChanged(selectedPosition)
+                return category
+            }
+        }
+        return null
+    }
+
+    companion object {
+        const val TAG = Constants.TAG_PREFIX + "CategoryAdapter"
     }
 }

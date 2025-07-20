@@ -16,7 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
+private const val ARG_CATEGORY_TYPE = "param_category_type"
+private const val ARG_CATEGORY_ID = "param_category_id"
 
 /**
  * A simple [Fragment] subclass.
@@ -27,6 +28,7 @@ private const val ARG_PARAM1 = "param1"
 class CategoryTabFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var categoryType: Int? = null
+    private var defaultCategoryId: Int? = null
     private lateinit var binding: FragmentCategoryTabBinding
     private var currentSelectedCategory: Category? = null
     private val viewmodel: CategoryTabViewModel by viewModels()
@@ -41,7 +43,8 @@ class CategoryTabFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            categoryType = it.getInt(ARG_PARAM1)
+            categoryType = it.getInt(ARG_CATEGORY_TYPE)
+            defaultCategoryId = it.getInt(ARG_CATEGORY_ID)
         }
     }
 
@@ -62,6 +65,11 @@ class CategoryTabFragment : Fragment() {
                 .observe(viewLifecycleOwner) { categoryList ->
                     Log.d(TAG, "Initial categories: ${categoryList.size}")
                     categoryAdapter.submitList(categoryList)
+                    if (currentSelectedCategory == null) { // 初始化时才选中
+                        defaultCategoryId?.let { id ->
+                            currentSelectedCategory = categoryAdapter.selectCategoryById(id)
+                        }
+                    }
                 }
         }
     }
@@ -75,7 +83,7 @@ class CategoryTabFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        categoryAdapter = CategoryAdapter() { category ->
+        categoryAdapter = CategoryAdapter { category ->
             currentSelectedCategory = category
             categorySelectedListener?.onCategorySelected(category)
             Log.d(TAG, "选中类别: $category")
@@ -93,15 +101,16 @@ class CategoryTabFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
+         * @param categoryType Parameter 1.
          * @return A new instance of fragment CategoryTabFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: Int) =
+        fun newInstance(categoryType: Int, defaultCategoryId: Int) =
             CategoryTabFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_PARAM1, param1)
+                    putInt(ARG_CATEGORY_TYPE, categoryType)
+                    putInt(ARG_CATEGORY_ID, defaultCategoryId)
                 }
             }
     }
